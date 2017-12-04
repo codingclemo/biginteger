@@ -77,8 +77,8 @@ void ostreamTest(){
 void aritmeticTest(){
   BigInt a(1234);
   BigInt b(5678);
-  //BigInt c = a+b;
-  cout << a+b <<endl;
+  BigInt c = a+b;
+  cout << c <<endl;
 }
 
 int main(void) {
