@@ -18,7 +18,7 @@ public:
     virtual ~BigInt(); //destructor
     BigInt(const BigInt &b); //copy constructor
     BigInt& operator = (const BigInt &b); //assignment operator
-
+    
     short cmp(const BigInt &b) const; //compare
     
     /* bool operations */

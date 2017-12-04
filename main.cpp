@@ -78,7 +78,14 @@ void aritmeticTest(){
   BigInt a(1234);
   BigInt b(5678);
   BigInt c = a+b;
-  cout << c <<endl;
+  cout << a << " + " << b << " = " << a+b <<endl;
+
+  unsigned short testArray[] = {9,9,9,9,9,9,9,9,9,9};
+  unsigned long testLength = 10;
+  BigInt d(testArray, testLength);
+  b = BigInt(999);
+
+  cout << d << " + " << b << " = " << d+b <<endl;
 }
 
 int main(void) {

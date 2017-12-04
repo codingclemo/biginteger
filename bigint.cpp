@@ -3,18 +3,10 @@
 
 using namespace std;
 
-/* Variables 
-private:
-    bool isNegative;
-    unsigned long length;
-    unsigned short *digits;
-*/
-
-
 BigInt::BigInt(long value)
     :isNegative(false), length(0), digits(nullptr)
 {
-    cout << "#----- constructor long -----#" << endl;
+    //cout << "#----- constructor long -----#" << endl;
     //check sign
     isNegative = value < 0;
     if(isNegative){ value *= -1; }
@@ -37,14 +29,13 @@ BigInt::BigInt(long value)
 BigInt::BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength)
     :isNegative(false), length(0), digits(nullptr)
 {
-    cout << "#----- constructor short array -----#" << endl;
+    //cout << "#----- constructor short array -----#" << endl;
 
     //get real length
     for(unsigned long i = 0; i < arrayLength; i++){
         if(arrayOfDigits[i] > 9){
             unsigned short helpValue = arrayOfDigits[i];
             while(helpValue != 0){
-                cout << "helpvalue: " << helpValue << endl;
                 helpValue = helpValue / 10;
                 length++;
             }
@@ -55,10 +46,6 @@ BigInt::BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength)
     
     //allocate memory with real length 
     digits = new unsigned short [length];
-
-    cout << "arrayLength: " << arrayLength << endl;
-    cout << "length: " << length << endl;
-    
     unsigned long arrayIndex = 0;
 
     for(unsigned long i = 0; i < arrayLength; i++){
@@ -83,14 +70,10 @@ BigInt::BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength)
             arrayIndex++;
         }
     }
-    /*
-    for(unsigned long a = 0; a < length; a++){
-        cout << "a: " << a << " digits[a]: " << digits[a] << endl;
-    } */  
 }
 
 BigInt::~BigInt(){
-    cout << "#----- deconstructor -----#" << endl;
+    //cout << "#----- deconstructor -----#" << endl;
     delete[] digits;
     digits = nullptr;
 } 
@@ -98,14 +81,14 @@ BigInt::~BigInt(){
 BigInt::BigInt(const BigInt &b)
     :isNegative(b.isNegative), length(b.length), digits(new unsigned short[b.length])
 {
-    cout << "#----- copy constructor -----#" << endl;
+    //cout << "#----- copy constructor -----#" << endl;
     for(unsigned long i = 0; i < this->length; i++){
         this->digits[i] =b.digits[i];
     }
 }
 
 BigInt& BigInt::operator = (const BigInt &b) {
-    cout << "#----- assignment operator -----#" << endl;
+    //cout << "#----- assignment operator -----#" << endl;
     if (this != &b) {
         isNegative = b.isNegative;
         length = b.length;
@@ -157,7 +140,6 @@ short BigInt::cmp(const BigInt &b) const
             returnVal *= -1;
         }
     }
-    cout << "returnVal: " << returnVal << endl;
     return returnVal;
 }
 
@@ -194,7 +176,7 @@ ostream &operator << (std::ostream &output, const BigInt &b) {
 
 
 BigInt operator + (const BigInt &a, const BigInt &b) {
-    cout << "#----- + operator -----#" << endl;
+    //cout << "#----- + operator -----#" << endl;
 
     // die länge kann, muss aber nicht, um 1 größer sein
     // zB.:  9 + 9 = 18     max(a.length, b.length ) = 1 
@@ -202,7 +184,7 @@ BigInt operator + (const BigInt &a, const BigInt &b) {
     unsigned long newLength = max(a.length, b.length);
 
     unsigned short newArray[newLength];
-    cout << "newLength: " << newLength << endl;
+    //cout << "newLength: " << newLength << endl;
 
     //make arrays of BigInt same sized
     unsigned short diff = newLength - a.length;
@@ -210,17 +192,18 @@ BigInt operator + (const BigInt &a, const BigInt &b) {
     for(unsigned long i = 0; i < diff; i++){
         helpA[i] = 0;
     }
-    for(unsigned long i = diff; i < a.length; i++){
-        helpA[i] = a.digits[i];
+    for(unsigned long i = diff; i < newLength; i++){
+        helpA[i] = a.digits[i-diff];
     }
 
     diff = newLength - b.length;
+
     unsigned short helpB[newLength];
     for(unsigned long i = 0; i < diff; i++){
         helpB[i] = 0;
     }
-    for(unsigned long i = diff; i < b.length; i++){
-        helpB[i] = b.digits[i];
+    for(unsigned long i = diff; i < newLength; i++){
+        helpB[i] = b.digits[i-diff];
     }
 
     unsigned short sum = 0;
@@ -235,45 +218,42 @@ BigInt operator + (const BigInt &a, const BigInt &b) {
     // mit der for loop und der abbruchbedingung i != 0 hast du nie i = 0 bearbeitet, deswegen
     // hat die 1. stelle gefehlt
     while(i >= 0) {
-            sum = a.digits[i] + b.digits[i] + carry;
+            sum = helpA[i] + helpB[i] + carry;
             if(sum > 9){
-                carry = 1;
+                carry = sum / 10;
                 rest = sum % 10;
             } else {
                 carry = 0;
                 rest = sum;
             }
-           // cout << "i: " << i;
-           // cout << " a.digits[i]: " << a.digits[i] << " b.digits[i]: " << b.digits[i];
-           // cout << " sum: " << sum << " rest: " << rest << " carry: " << carry;
-
+            /* cout << "i: " << i;
+            * cout << " a.digits[i]: " << a.digits[i] << " b.digits[i]: " << b.digits[i];
+            * cout << " sum: " << sum << " rest: " << rest << " carry: " << carry;
+            */
             newArray[i] = rest;
-           // cout << " newArray[i]: " << newArray[i] << endl;
+            //cout << " newArray[i]: " << newArray[i] << endl;
 
             // wenn i == 0 ist und dann kommt das i--, dann wird i irgendneinen POSITIVEN wert annehmen
             // deswegen das break   vor dem i--
             if (i == 0) break;
-            i--;
+            i--; 
     }
-    cout << "a: |";
-    for(unsigned long i = 0; i < a.length; i++){
-        cout <<  a.digits[i] << "|";
+    unsigned short adaptedArray[newLength+1];
+    if (carry){
+        //cout << "-- carry --" << endl;
+        newLength++;
+        adaptedArray[0] = carry;
+        for(unsigned long i = 1; i < newLength; i++){
+            adaptedArray[i] = newArray[i-1];
+        }
     }
-    cout << endl;
 
-    cout << "b: |";
-    for(unsigned long i = 0; i < b.length; i++){
-        cout <<  b.digits[i] << "|";
-    }
-    cout << endl;
- 
     BigInt n(newArray, newLength);
+    BigInt na(adaptedArray, newLength);
 
-    cout << "n: |";
-    for(unsigned long i = 0; i < n.length; i++){
-        cout <<  n.digits[i] << "|";
+    if(carry){
+        return na;
+    } else {
+        return n;
     }
-    cout << endl;
-
-    return n;
 }
