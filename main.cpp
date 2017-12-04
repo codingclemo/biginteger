@@ -64,13 +64,21 @@ void ostreamTest(){
   unsigned short testArray[] = {157,63,1,0,1345};
   unsigned long testLength = 5;
   BigInt test(testArray, testLength);
-  BigInt test2(15763);
+  unsigned short testArray1[] = {7,3,1,0,4,9};
+  unsigned long testLength1 = 6;
+  BigInt test1(testArray1, testLength1);
 
-  if(test == test2) { cout << "yess" << endl;}
-  cout << "15763101345 = " << test << endl; 
-  cout << "15763 = " << test2 << endl; 
   cout << "123456 = " << positive << endl;
   cout << "-123456 = " << negative << endl;
+  cout << "15763101345 = " << test << endl; 
+  cout << "731049 = " << test1 << endl; 
+}
+
+void aritmeticTest(){
+  BigInt a(1234);
+  BigInt b(5678);
+  //BigInt c = a+b;
+  cout << a+b <<endl;
 }
 
 int main(void) {
@@ -97,8 +105,10 @@ int main(void) {
   //boolTests();
 
   /* output stream tests */
-  ostreamTest();
+  //ostreamTest();
 
+  /* aritmetic tests */
+  aritmeticTest();
   return 0; 
 }
 

@@ -44,6 +44,7 @@ BigInt::BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength)
         if(arrayOfDigits[i] > 9){
             unsigned short helpValue = arrayOfDigits[i];
             while(helpValue != 0){
+                cout << "helpvalue: " << helpValue << endl;
                 helpValue = helpValue / 10;
                 length++;
             }
@@ -82,11 +83,17 @@ BigInt::BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength)
             arrayIndex++;
         }
     }
-
+    /*
     for(unsigned long a = 0; a < length; a++){
         cout << "a: " << a << " digits[a]: " << digits[a] << endl;
-    }   
+    } */  
 }
+
+BigInt::~BigInt(){
+    cout << "#----- deconstructor -----#" << endl;
+    delete[] digits;
+    digits = nullptr;
+} 
 
 BigInt::BigInt(const BigInt &b)
     :isNegative(b.isNegative), length(b.length), digits(new unsigned short[b.length])
@@ -97,6 +104,19 @@ BigInt::BigInt(const BigInt &b)
     }
 }
 
+BigInt& BigInt::operator = (const BigInt &b) {
+    cout << "#----- assignment operator -----#" << endl;
+    if (this != &b) {
+        isNegative = b.isNegative;
+        length = b.length;
+        digits = new unsigned short[length];
+
+        for(unsigned long i = 0; i < length; i++){
+            digits[i] = b.digits[i];
+        }
+    }
+    return *this;
+}
 
 short BigInt::cmp(const BigInt &b) const
 {
@@ -169,11 +189,72 @@ ostream &operator << (std::ostream &output, const BigInt &b) {
     return output;
 }
 
-BigInt::~BigInt(){
-    cout << "#----- deconstructor -----#" << endl;
-    delete[] digits;
-    digits = nullptr;
-} 
 
-//BigInt(const BigInt &bi); //copy constructor
-//BigInt& operator = (const BigInt &bi); //assignment operator
+BigInt operator + (const BigInt &a, const BigInt &b) {
+    cout << "#----- + operator -----#" << endl;
+    unsigned long newLength = max(a.length, b.length);
+
+    unsigned short newArray[newLength];
+    cout << "newLength: " << newLength << endl;
+
+    //make arrays of BigInt same sized
+    unsigned short diff = newLength - a.length;
+    unsigned short helpA[newLength];
+    for(unsigned long i = 0; i < diff; i++){
+        helpA[i] = 0;
+    }
+    for(unsigned long i = diff; i < a.length; i++){
+        helpA[i] = a.digits[i];
+    }
+
+    diff = newLength - b.length;
+    unsigned short helpB[newLength];
+    for(unsigned long i = 0; i < diff; i++){
+        helpB[i] = 0;
+    }
+    for(unsigned long i = diff; i < b.length; i++){
+        helpB[i] = b.digits[i];
+    }
+
+    unsigned short sum = 0;
+    unsigned short rest = 0;
+    unsigned short carry = 0;
+
+    for(unsigned long i = newLength -1; i != 0; i--){
+            sum = a.digits[i] + b.digits[i] + carry;
+            if(sum > 9){
+                carry = 1;
+                rest = sum % 10;
+            } else {
+                carry = 0;
+                rest = sum;
+            }
+           // cout << "i: " << i;
+           // cout << " a.digits[i]: " << a.digits[i] << " b.digits[i]: " << b.digits[i];
+           // cout << " sum: " << sum << " rest: " << rest << " carry: " << carry;
+
+            newArray[i] = rest;
+           // cout << " newArray[i]: " << newArray[i] << endl;
+    }
+    cout << "a: |";
+    for(unsigned long i = 0; i < a.length; i++){
+        cout <<  a.digits[i] << "|";
+    }
+    cout << endl;
+
+    cout << "b: |";
+    for(unsigned long i = 0; i < b.length; i++){
+        cout <<  b.digits[i] << "|";
+    }
+    cout << endl;
+ 
+    BigInt n(newArray, newLength);
+
+    cout << "n: |";
+    for(unsigned long i = 0; i < n.length; i++){
+        cout <<  n.digits[i] << "|";
+    }
+    cout << endl;
+
+    return n;
+}
