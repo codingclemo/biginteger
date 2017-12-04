@@ -16,10 +16,19 @@ public:
     explicit BigInt(long value = 0); //constructor
     explicit BigInt(unsigned short *arrayOfDigits); //constructor
     virtual ~BigInt(); //destructor
+    BigInt(const BigInt &b); //copy constructor
 
     short cmp(const BigInt &b) const; //compare
 
-    //BigInt(const BigInt &bi); //copy constructor
+    bool operator == (const BigInt &b) const;
+    bool operator != (const BigInt &b) const { return !operator == (b); }
+    bool operator < (const BigInt &b) const;
+    bool operator <= (const BigInt &b) const;
+    bool operator > (const BigInt &b) const;
+    bool operator >= (const BigInt &b) const;
+
+    friend std::ostream &operator << (std::ostream &output, const BigInt &b);
+
 
     //BigInt& operator = (const BigInt &bi); //assignment operator
 };

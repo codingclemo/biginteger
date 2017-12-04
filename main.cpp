@@ -35,7 +35,35 @@ void cmpTest(){
   negSame2.cmp(negSame1); cout << "Expected: 0\t" <<  endl;
   negSameBut1.cmp(negSameBut2); cout << "Expected: -1\t" <<  endl;
   negSameBut2.cmp(negSameBut1); cout << "Expected: 1\t" <<  endl << endl;
+}
 
+void boolTests(){
+  BigInt negSmall1(-324);
+  BigInt negSmall2(-324);
+  BigInt negSmall3(-323);
+  
+  BigInt posSmall1(324);
+  BigInt posSmall2(324);
+  BigInt posSmall3(323);
+
+  if(posSmall1 == posSmall2) { cout << "== True\t" <<  endl; } 
+  if(posSmall1 != posSmall3) { cout << "!= True\t" <<  endl; }
+
+  if(posSmall3 < posSmall1) { cout << "< True\t" <<  endl; }
+  if(posSmall2 <= posSmall1) { cout << "<=  == True\t" <<  endl; }
+  if(posSmall3 <= posSmall2) { cout << "<=  <  True\t" <<  endl; }
+
+  if(negSmall3 > negSmall2) { cout << "> True\t" <<  endl; }
+  if(negSmall2 >= negSmall1) { cout << ">=  == True\t" <<  endl; }
+  if(negSmall3 >= negSmall2) { cout << ">=  >  True\t" <<  endl; }
+}
+
+void ostreamTest(){
+  BigInt positive(123456);
+  BigInt negative(-123456);
+
+  cout << "123456 = " << positive << endl;
+  cout << "-123456 = " << negative << endl;
 }
 
 int main(void) {
@@ -54,9 +82,15 @@ int main(void) {
 
   cout << "Hello World" << endl;
  */
-  /* compare tests */
-  cmpTest();
 
+  /* compare tests */
+  //cmpTest();
+
+  /* bool operator tests */
+  //boolTests();
+
+  /* output stream tests */
+  ostreamTest();
 
   return 0; 
 }

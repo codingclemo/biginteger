@@ -29,7 +29,7 @@ BigInt::BigInt(long value)
     //store digits
     for(int i = length -1; i >= 0; i--){
         digits[i] = value % 10;
-        cout << "  i: " << i << " digit: " << digits[i] << " value: " << value << endl;
+        // cout << "  i: " << i << " digit: " << digits[i] << " value: " << value << endl;
         value = value / 10;
     }
 }
@@ -40,6 +40,16 @@ BigInt::BigInt(unsigned short *arrayOfDigits)
     cout << "#----- constructor short array -----#" << endl;
     //TODO 1
 }
+
+BigInt::BigInt(const BigInt &b)
+    :isNegative(b.isNegative), length(b.length), digits(new unsigned short[b.length])
+{
+    cout << "#----- copy constructor -----#" << endl;
+    for(unsigned long i = 0; i < this->length; i++){
+        this->digits[i] =b.digits[i];
+    }
+}
+
 
 short BigInt::cmp(const BigInt &b) const
 {
@@ -54,10 +64,10 @@ short BigInt::cmp(const BigInt &b) const
     } else {
         if(this->length == b.length){
             int i = 0;
-                cout << "i: " << i << " this.digits[i]: " << this->digits[i] << "\tb.digits[i]: " << b.digits[i] << endl;
+              //  cout << "i: " << i << " this.digits[i]: " << this->digits[i] << "\tb.digits[i]: " << b.digits[i] << endl;
             while(this->digits[i] == b.digits[i] && i < this->length-1){
                 i++;
-                cout << "i: " << i << " this.digits[i]: " << this->digits[i] << "\tb.digits[i]: " << b.digits[i] << endl;
+              //  cout << "i: " << i << " this.digits[i]: " << this->digits[i] << "\tb.digits[i]: " << b.digits[i] << endl;
             }
             
             if(this->digits[i] > b.digits[i]){ 
@@ -79,6 +89,37 @@ short BigInt::cmp(const BigInt &b) const
     }
     cout << "returnVal: " << returnVal << endl;
     return returnVal;
+}
+
+bool BigInt::operator == (const BigInt &b) const{
+    bool equal = 0 == cmp(b);
+    return equal;
+}
+bool BigInt::operator < (const BigInt &b) const{
+    bool equal = -1 == cmp(b);
+    return equal;
+}
+bool BigInt::operator <= (const BigInt &b) const{
+    bool equal = (-1 == cmp(b) || (0 == cmp(b)));
+    return equal;       
+}
+bool BigInt::operator > (const BigInt &b) const{
+    bool equal = 1 == cmp(b);
+    return equal;
+}
+bool BigInt::operator >= (const BigInt &b) const{
+    bool equal = (1 == cmp(b) || (0 == cmp(b)));
+    return equal;    
+}
+
+ostream &operator << (std::ostream &output, const BigInt &b) {
+    if (b.isNegative) {
+        output << "-";
+    }
+    for (unsigned long i = 0; i < b.length; i++) {
+        output << b.digits[i];
+    }
+    return output;
 }
 
 BigInt::~BigInt(){
