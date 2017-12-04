@@ -2,7 +2,7 @@
 #define BIGINT_H
 
 #include <iostream>
-#include "bigint.h"
+// #include "bigint.h"   <-- this is the file :-)
 
 class BigInt {
 /* Variables */
