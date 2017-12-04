@@ -34,11 +34,58 @@ BigInt::BigInt(long value)
     }
 }
 
-BigInt::BigInt(unsigned short *arrayOfDigits)
+BigInt::BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength)
     :isNegative(false), length(0), digits(nullptr)
 {
     cout << "#----- constructor short array -----#" << endl;
-    //TODO 1
+
+    //get real length
+    for(unsigned long i = 0; i < arrayLength; i++){
+        if(arrayOfDigits[i] > 9){
+            unsigned short helpValue = arrayOfDigits[i];
+            while(helpValue != 0){
+                helpValue = helpValue / 10;
+                length++;
+            }
+        } else {
+            length++;
+        }
+    }
+    
+    //allocate memory with real length 
+    digits = new unsigned short [length];
+
+    cout << "arrayLength: " << arrayLength << endl;
+    cout << "length: " << length << endl;
+    
+    unsigned long arrayIndex = 0;
+
+    for(unsigned long i = 0; i < arrayLength; i++){
+        if(arrayOfDigits[i] > 9){
+            unsigned short helpValue = arrayOfDigits[i];
+            unsigned short helpArray[] = {0,0,0,0,0};
+            unsigned short helpLength = 0;
+            int j = 0;
+            while(helpValue != 0){
+                helpArray[j] = helpValue % 10;
+                helpValue = helpValue / 10;
+                helpLength++;
+                j++;
+            }
+
+            for(unsigned short k = 0; (k < helpLength) && (helpLength-k-1 >= 0); k++){
+                digits[arrayIndex] = helpArray[helpLength -k -1];
+                arrayIndex++;
+            }
+        } else {
+            digits[arrayIndex] = arrayOfDigits[i];
+            arrayIndex++;
+        }
+    }
+
+    for(unsigned long a = 0; a < length; a++){
+        cout << "a: " << a << " digits[a]: " << digits[a] << endl;
+    }   
 }
 
 BigInt::BigInt(const BigInt &b)

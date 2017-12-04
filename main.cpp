@@ -61,7 +61,14 @@ void boolTests(){
 void ostreamTest(){
   BigInt positive(123456);
   BigInt negative(-123456);
+  unsigned short testArray[] = {157,63,1,0,1345};
+  unsigned long testLength = 5;
+  BigInt test(testArray, testLength);
+  BigInt test2(15763);
 
+  if(test == test2) { cout << "yess" << endl;}
+  cout << "15763101345 = " << test << endl; 
+  cout << "15763 = " << test2 << endl; 
   cout << "123456 = " << positive << endl;
   cout << "-123456 = " << negative << endl;
 }

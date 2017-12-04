@@ -14,7 +14,7 @@ private:
 /* Methods */
 public:
     explicit BigInt(long value = 0); //constructor
-    explicit BigInt(unsigned short *arrayOfDigits); //constructor
+    explicit BigInt(unsigned short int arrayOfDigits[], unsigned long arrayLength); //constructor
     virtual ~BigInt(); //destructor
     BigInt(const BigInt &b); //copy constructor
 
