@@ -109,6 +109,9 @@ BigInt& BigInt::operator = (const BigInt &b) {
     if (this != &b) {
         isNegative = b.isNegative;
         length = b.length;
+
+        // irgendwo  in einem der beiden/dreien konstruktoren gab es schon ein new -> zuerst ein delete
+        delete[] digits; 
         digits = new unsigned short[length];
 
         for(unsigned long i = 0; i < length; i++){
@@ -192,6 +195,10 @@ ostream &operator << (std::ostream &output, const BigInt &b) {
 
 BigInt operator + (const BigInt &a, const BigInt &b) {
     cout << "#----- + operator -----#" << endl;
+
+    // die länge kann, muss aber nicht, um 1 größer sein
+    // zB.:  9 + 9 = 18     max(a.length, b.length ) = 1 
+    // newLnegth muss aber 2 sein - das macht dir dann unten probleme beim while (vormals for)
     unsigned long newLength = max(a.length, b.length);
 
     unsigned short newArray[newLength];
@@ -220,7 +227,14 @@ BigInt operator + (const BigInt &a, const BigInt &b) {
     unsigned short rest = 0;
     unsigned short carry = 0;
 
-    for(unsigned long i = newLength -1; i != 0; i--){
+    // das for/while funktioniert nur gut, wenn beide Zahlen gleich viele Digits haben
+    // und das ergbenis auch nur soviele digits
+    // zB 99 + 99 geht so nicht
+
+    unsigned long i = newLength -1;
+    // mit der for loop und der abbruchbedingung i != 0 hast du nie i = 0 bearbeitet, deswegen
+    // hat die 1. stelle gefehlt
+    while(i >= 0) {
             sum = a.digits[i] + b.digits[i] + carry;
             if(sum > 9){
                 carry = 1;
@@ -235,6 +249,11 @@ BigInt operator + (const BigInt &a, const BigInt &b) {
 
             newArray[i] = rest;
            // cout << " newArray[i]: " << newArray[i] << endl;
+
+            // wenn i == 0 ist und dann kommt das i--, dann wird i irgendneinen POSITIVEN wert annehmen
+            // deswegen das break   vor dem i--
+            if (i == 0) break;
+            i--;
     }
     cout << "a: |";
     for(unsigned long i = 0; i < a.length; i++){
