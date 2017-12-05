@@ -257,3 +257,71 @@ BigInt operator + (const BigInt &a, const BigInt &b) {
         return n;
     }
 }
+
+BigInt operator - (const BigInt &a, const BigInt &b) {
+    //cout << "#----- - operator -----#" << endl;
+    BigInt newA = a;
+    BigInt newB = b;
+    bool swapped = false;
+    // make newA the larger value for easier procedure;
+    if(a.cmp(b) < 0){
+        newA = b;
+        newB = a;
+        swapped = true;
+    }
+    unsigned long newLength = max(newA.length, newB.length);
+    unsigned short newArray[newLength];
+    //make arrays of BigInt same sized
+    unsigned short diff = newLength - newA.length;
+    unsigned short helpA[newLength];
+    for(unsigned long i = 0; i < diff; i++) { helpA[i] = 0; }
+    for(unsigned long i = diff; i < newLength; i++) { helpA[i] = newA.digits[i-diff]; }
+
+    diff = newLength - newB.length;
+    unsigned short helpB[newLength];
+    for(unsigned long i = 0; i < diff; i++) { helpB[i] = 0; }
+    for(unsigned long i = diff; i < newLength; i++) { helpB[i] = newB.digits[i-diff]; }
+
+    unsigned short minuend = 0;
+    unsigned short subtrahend = 0;
+    unsigned short carry = 0;    
+    for (unsigned long i = newLength - 1; i >= 0; i--){
+        minuend = helpA[i] + carry * 10;
+        subtrahend = helpB[i] + carry;
+        //set carry
+        if(helpA[i] < helpB[i]){
+            carry = 1;
+        } else { 
+            carry = 0; 
+        }
+        newArray[i] = minuend - subtrahend;
+        //cout << i << ". " << newArray[i] << " = " << minuend << " - " << subtrahend << "//" << "carry: " << carry << endl;
+        
+        if(i == 0) break;
+    }
+    //get rid of zeros at the beginning of the array
+    unsigned long adaptedLength = newLength;
+    for(unsigned long i = 0; i < newLength;i++){
+        if(newArray[0] == 0){
+            while(newArray[i] == 0){
+                //cout << i << ". newArray[i]: " << newArray[i] << endl;
+                adaptedLength--;
+            }
+        }
+        //cout << i << ". newArray[i]: " << newArray[i] << endl;
+    }
+
+    unsigned short adaptedArray[adaptedLength];
+    unsigned long diffLength = newLength - adaptedLength;
+    for(unsigned long i = diffLength; i < newLength; i++){
+        adaptedArray[i-diffLength] = newArray[i];
+        //cout << i << ". adaptedArray[i]: " << adaptedArray[i] << endl;
+    }
+    
+    BigInt n(adaptedArray, adaptedLength);
+    n.isNegative = swapped;
+    //n.length = adaptedLength;
+    //n.digits = adaptedArray;
+
+    return n;
+}

@@ -33,7 +33,7 @@ public:
 
     /* artimetic functions */
     friend BigInt operator + (const BigInt &a, const BigInt &b);
-
+    friend BigInt operator - (const BigInt &a, const BigInt &b);
 };
 
 #endif

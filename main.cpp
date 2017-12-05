@@ -79,6 +79,8 @@ void aritmeticTest(){
   BigInt b(5678);
   BigInt c = a+b;
   cout << a << " + " << b << " = " << a+b <<endl;
+  cout << a << " - " << b << " = " << a-b <<endl;
+  cout << b << " - " << a << " = " << b-a <<endl;
 
   unsigned short testArray[] = {9,9,9,9,9,9,9,9,9,9};
   unsigned long testLength = 10;
@@ -86,6 +88,11 @@ void aritmeticTest(){
   b = BigInt(999);
 
   cout << d << " + " << b << " = " << d+b <<endl;
+  cout << d << " - " << b << " = " << d-b <<endl;
+  cout << b << " - " << d << " = " << b-d <<endl;
+
+  c = BigInt(-333);
+  cout << c << " - " << d << " = " << c-d <<endl;
 }
 
 int main(void) {
